@@ -12,11 +12,14 @@ public class Locator : MonoBehaviour
     float locationAnalyzeTime;
     bool isMobilePlatform;
     bool isLocationUpdating;
+    GoogleMapDrawer googleMapDrawer;
     // Use this for initialization
     void Start()
     {
         locationService = Input.location;
         locationCoordination = ScriptableObject.CreateInstance<LocationCoordination>();
+        googleMapDrawer = GameObject.FindGameObjectWithTag("MapDrawer").GetComponent<GoogleMapDrawer>();
+        googleMapDrawer.Calculator = locationCoordination;
         //ロケーションサービスが無効、かつユーザーが許可しているなら
         //ロケーションサービスを有効化
         switch (Application.platform)
@@ -75,6 +78,7 @@ public class Locator : MonoBehaviour
             if (locationService.status == LocationServiceStatus.Running)
             {
                 locationCoordination.SetCoordination(locationService.lastData.longitude, locationService.lastData.latitude);
+                googleMapDrawer.BuildMap();
             }
             else
             {
