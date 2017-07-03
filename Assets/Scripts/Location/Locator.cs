@@ -13,6 +13,10 @@ public class Locator : MonoBehaviour
     bool isMobilePlatform;
     bool isLocationUpdating;
     GoogleMapDrawer googleMapDrawer;
+    [SerializeField]
+    float initlat = 35.513f;
+    [SerializeField]
+    float initlong = 139.619f;
     // Use this for initialization
     void Start()
     {
@@ -40,6 +44,10 @@ public class Locator : MonoBehaviour
                     break;
             }
         }
+        else
+        {
+            locationCoordination.SetCoordination(initlong, initlat);
+        }
 
     }
 
@@ -52,18 +60,15 @@ public class Locator : MonoBehaviour
             if (!(isLocationUpdating) && locationAnalyzeCounter >= locationAnalyzeTime)
             {
                 StartCoroutine("LocationUpdate");
+                googleMapDrawer.BuildMap();
                 locationAnalyzeCounter = 0.0f;
             }
         }
     }
 
-    private void OnDestroy()
-    {
-        
-    }
-
     IEnumerator LocationUpdate()
     {
+
         int retryCounter = 20;
         if (locationService.isEnabledByUser)
         {
@@ -78,13 +83,12 @@ public class Locator : MonoBehaviour
             if (locationService.status == LocationServiceStatus.Running)
             {
                 locationCoordination.SetCoordination(locationService.lastData.longitude, locationService.lastData.latitude);
-                googleMapDrawer.BuildMap();
             }
             else
             {
                 Debug.Log("failed Location Service initiation");
             }
-            locationService.Stop();
+            //locationService.Stop();
             isLocationUpdating = false;
         }
         
