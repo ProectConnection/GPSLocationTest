@@ -17,6 +17,8 @@ public class Locator : MonoBehaviour
     float initlat = 35.513f;
     [SerializeField]
     float initlong = 139.619f;
+
+
     // Use this for initialization
     void Start()
     {
@@ -59,8 +61,9 @@ public class Locator : MonoBehaviour
             locationAnalyzeCounter += Time.deltaTime;
             if (!(isLocationUpdating) && locationAnalyzeCounter >= locationAnalyzeTime)
             {
-                StartCoroutine("LocationUpdate");
+                StartCoroutine(LocationUpdate());
                 googleMapDrawer.BuildMap();
+                
                 locationAnalyzeCounter = 0.0f;
             }
         }
