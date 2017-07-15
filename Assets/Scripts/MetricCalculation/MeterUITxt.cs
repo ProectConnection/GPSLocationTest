@@ -15,8 +15,7 @@ public abstract class MeterUITxt : MonoBehaviour {
     {
         Ref_LocationCoordination = GameObject.FindGameObjectWithTag("Locator").GetComponent<Locator>().locationCoordination;
         TextUI = gameObject.GetComponent<UnityEngine.UI.Text>();
-        Coroutine = GetLocationCoordinationValueCorutine();
-        StartCoroutine(Coroutine);
+        StartCoroutine(GetLocationCoordinationValueCorutine());
     }
 
     void Update()
@@ -24,7 +23,7 @@ public abstract class MeterUITxt : MonoBehaviour {
         TextUI.text = Metrics.ToString();
     }
 
-    IEnumerator GetLocationCoordinationValueCorutine()
+    protected IEnumerator GetLocationCoordinationValueCorutine()
     {
         while (true)
         {
