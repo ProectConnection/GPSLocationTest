@@ -2,6 +2,6 @@
 
     public override void GetLocationCoordinationValue()
     {
-        Metrics = ((long_lati_calculator.GetInstance.CalculateLongitudeMetricsPerDegree()) * Ref_LocationCoordination.GetLongitude);
+        Metrics = Ref_Locator.metricsCoordination.longitudeMetrics; 
     }
 }

@@ -6,7 +6,8 @@ public class Locator : MonoBehaviour
     LocationService locationService;
     [System.NonSerialized]
     public LocationCoordination locationCoordination;
-
+    public MetricsCoordination metricsCoordination;
+    DistanceCalculator distanceCalculator;
     float locationAnalyzeCounter;
     [SerializeField]
     float locationAnalyzeTime;
@@ -24,6 +25,9 @@ public class Locator : MonoBehaviour
     {
         locationService = Input.location;
         locationCoordination = ScriptableObject.CreateInstance<LocationCoordination>();
+        metricsCoordination = ScriptableObject.CreateInstance<MetricsCoordination>();
+        metricsCoordination.locationCoordination = locationCoordination;
+        distanceCalculator = gameObject.GetComponent<DistanceCalculator>();
         googleMapDrawer = GameObject.FindGameObjectWithTag("MapDrawer").GetComponent<GoogleMapDrawer>();
         googleMapDrawer.Calculator = locationCoordination;
         //ロケーションサービスが無効、かつユーザーが許可しているなら
@@ -56,7 +60,7 @@ public class Locator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isMobilePlatform)
+        if (/*isMobilePlatform*/true)
         {
             locationAnalyzeCounter += Time.deltaTime;
             if (!(isLocationUpdating) && locationAnalyzeCounter >= locationAnalyzeTime)
@@ -86,6 +90,8 @@ public class Locator : MonoBehaviour
             if (locationService.status == LocationServiceStatus.Running)
             {
                 locationCoordination.SetCoordination(locationService.lastData.longitude, locationService.lastData.latitude);
+                metricsCoordination.ConvertLongAndLetiToMetrics();
+                distanceCalculator.DistanceCalculation();
             }
             else
             {
@@ -97,4 +103,6 @@ public class Locator : MonoBehaviour
         
         yield return null;
     }
+
+    
 }
