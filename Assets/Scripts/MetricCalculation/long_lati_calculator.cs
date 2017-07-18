@@ -4,9 +4,9 @@ using UnityEngine;
 
 public sealed class long_lati_calculator {
 
-    const int EarthRadius = 6378150;
-    const float LongitudeMetricsParDegree= 111263.283f;
-    float LongitudeMetricsPerDegree = (2.0f * Mathf.PI * EarthRadius);
+    const int Equator = 6378150;        //赤道半径
+    const int EarthRadius = 6356752;    //地球の半径
+    float LongitudeMetricsPerDegree = (2.0f * Mathf.PI * EarthRadius) / 360;
     public float longitudeMetricsPerDegree
     {
         get
@@ -30,9 +30,9 @@ public sealed class long_lati_calculator {
         }
     }
 
-    public float CalculateLatitudeMetricParDegree(float latitude)
+    public float CalculateLatitudeMetricParDegree(float Letitude)
     {
-        return  ((EarthRadius) * (Mathf.Cos(latitude / 180.0f * Mathf.PI) * 2.0f * Mathf.PI));
+        return  (2.0f * Mathf.PI * (Equator * Mathf.Cos(Letitude * Mathf.PI / 180.0f ))) / 360;
     }
 
     

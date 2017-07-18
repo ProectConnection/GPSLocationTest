@@ -90,7 +90,7 @@ public class Locator : MonoBehaviour
             if (locationService.status == LocationServiceStatus.Running)
             {
                 locationCoordination.SetCoordination(locationService.lastData.longitude, locationService.lastData.latitude);
-                metricsCoordination.ConvertLongAndLetiToMetrics();
+                //metricsCoordination.ConvertLongAndLetiToMetrics();
                 distanceCalculator.DistanceCalculation();
             }
             else
