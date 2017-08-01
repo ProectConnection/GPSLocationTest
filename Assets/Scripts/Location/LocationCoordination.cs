@@ -18,4 +18,12 @@
     {
         get { return latitude; }
     }
+
+    public UnityEngine.Vector2 GetLocationCoordInVec2
+    {
+        get
+        {
+            return new UnityEngine.Vector2(longitude, latitude);
+        }
+    }
 }

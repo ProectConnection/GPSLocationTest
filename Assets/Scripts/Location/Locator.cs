@@ -6,7 +6,7 @@ public class Locator : MonoBehaviour
     LocationService locationService;
     [System.NonSerialized]
     public LocationCoordination locationCoordination;
-    public MetricsCoordination metricsCoordination;
+    //public MetricsCoordination metricsCoordination;
     DistanceCalculator distanceCalculator;
     float locationAnalyzeCounter;
     [SerializeField]
@@ -14,6 +14,7 @@ public class Locator : MonoBehaviour
     bool isMobilePlatform;
     bool isLocationUpdating;
     GoogleMapDrawer googleMapDrawer;
+    SpotManager spotManager;
     [SerializeField]
     float initlat = 35.513f;
     [SerializeField]
@@ -25,10 +26,9 @@ public class Locator : MonoBehaviour
     {
         locationService = Input.location;
         locationCoordination = ScriptableObject.CreateInstance<LocationCoordination>();
-        metricsCoordination = ScriptableObject.CreateInstance<MetricsCoordination>();
-        metricsCoordination.locationCoordination = locationCoordination;
         distanceCalculator = gameObject.GetComponent<DistanceCalculator>();
         googleMapDrawer = GameObject.FindGameObjectWithTag("MapDrawer").GetComponent<GoogleMapDrawer>();
+        spotManager = GameObject.FindGameObjectWithTag("SpotManager").GetComponent<SpotManager>();
         googleMapDrawer.Calculator = locationCoordination;
         //ロケーションサービスが無効、かつユーザーが許可しているなら
         //ロケーションサービスを有効化
@@ -67,6 +67,7 @@ public class Locator : MonoBehaviour
             {
                 StartCoroutine(LocationUpdate());
                 googleMapDrawer.BuildMap();
+                spotManager.StartSpotLocationUpdate();
                 
                 locationAnalyzeCounter = 0.0f;
             }
@@ -104,5 +105,10 @@ public class Locator : MonoBehaviour
         yield return null;
     }
 
-    
+    float CalculateDistanceOfNowCoordinationToSpot(SpotData targetSpotData)
+    {
+        Vector2 a = new Vector2(locationCoordination.GetLongitude, locationCoordination.GetLatitude);
+        Vector2 b = new Vector2(targetSpotData.longitude, targetSpotData.letitude);
+        return long_lati_calculator.GetInstance.CalculateLetiAndLongDistanceOfAtoB(a, b);
+    }
 }

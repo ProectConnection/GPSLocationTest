@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DistanceCalculator : MonoBehaviour {
@@ -7,6 +6,14 @@ public class DistanceCalculator : MonoBehaviour {
     Vector2 PrevPositionInMetrics;
     float totalMoveDistance;
     bool isFirstTime = true;
+
+    float SpeedPerHour;
+    [SerializeField, Range(0, 60)]
+    float WalkingSpeedPerHour;
+    [SerializeField,Range(0,60)]
+    float RunningSpeedPerHour;
+    [SerializeField]
+    float waitsecond;
     public float TotalMoveDistance
     {
         get
@@ -14,15 +21,14 @@ public class DistanceCalculator : MonoBehaviour {
             return totalMoveDistance;
         }
     }
-    MetricsCoordination ref_metricsCoordination;
 
     LocationCoordination ref_locationCoordination;
 
     private void Start()
     {
-        ref_metricsCoordination = GameObject.FindGameObjectWithTag("Locator").GetComponent<Locator>().metricsCoordination;
         ref_locationCoordination = GameObject.FindGameObjectWithTag("Locator").GetComponent<Locator>().locationCoordination;
-        //StartCoroutine(ProcessDistanceCalculation());
+        WalkingSpeedPerHour *= 1000.0f;
+        RunningSpeedPerHour *= 1000.0f;
     }
 
     public void DistanceCalculation()
@@ -34,14 +40,12 @@ public class DistanceCalculator : MonoBehaviour {
         }
         else
         {
-            float longitudeDistance = (long_lati_calculator.GetInstance.longitudeMetricsPerDegree * (ref_locationCoordination.GetLongitude - PrevPositionInMetrics.x));
-            totalMoveDistance += Mathf.Sqrt(
-                (long_lati_calculator.GetInstance.longitudeMetricsPerDegree * (ref_locationCoordination.GetLongitude - PrevPositionInMetrics.x)) *
-                (long_lati_calculator.GetInstance.longitudeMetricsPerDegree * (ref_locationCoordination.GetLongitude - PrevPositionInMetrics.x)) +
-                (long_lati_calculator.GetInstance.CalculateLatitudeMetricParDegree(PrevPositionInMetrics.y) * (ref_locationCoordination.GetLatitude - PrevPositionInMetrics.y)) *
-                (long_lati_calculator.GetInstance.CalculateLatitudeMetricParDegree(PrevPositionInMetrics.y) * (ref_locationCoordination.GetLatitude - PrevPositionInMetrics.y))
-                );
-            PrevPositionInMetrics = new Vector2(ref_locationCoordination.GetLongitude, ref_locationCoordination.GetLatitude);
+            Vector2 a = new Vector2(ref_locationCoordination.GetLongitude, ref_locationCoordination.GetLatitude);
+            Vector2 b = new Vector2(PrevPositionInMetrics.x, PrevPositionInMetrics.y);
+            float moveDistance = long_lati_calculator.GetInstance.CalculateLetiAndLongDistanceOfAtoB(a, b);
+            SpeedPerHour = moveDistance * (3600 / waitsecond);
+            if (SpeedPerHour >= WalkingSpeedPerHour && SpeedPerHour < RunningSpeedPerHour) totalMoveDistance += moveDistance;
+            PrevPositionInMetrics = new Vector2(a.x, a.y);
         }
     }
 
@@ -50,7 +54,7 @@ public class DistanceCalculator : MonoBehaviour {
         while (true)
         {
             DistanceCalculation();
-            yield return new WaitForSeconds(6.0f);
+            yield return new WaitForSeconds(waitsecond);
         }
     }
 }

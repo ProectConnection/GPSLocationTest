@@ -34,6 +34,25 @@ public sealed class long_lati_calculator {
     {
         return  (2.0f * Mathf.PI * (Equator * Mathf.Cos(Letitude * Mathf.PI / 180.0f ))) / 360;
     }
-
     
+    public float CalculateLetiAndLongDistanceOfAtoB(Vector2 a,Vector2 b)
+    {
+        return Mathf.Sqrt(
+                (GetInstance.longitudeMetricsPerDegree * (a.x - b.x)) *
+                (GetInstance.longitudeMetricsPerDegree * (a.x - b.x)) +
+                (GetInstance.CalculateLatitudeMetricParDegree((a.y + b.y) / 2) * (a.y - b.y)) *
+                (GetInstance.CalculateLatitudeMetricParDegree((a.y + b.y) / 2) * (a.y - b.y))
+                );
+    }
+
+    public Vector2 CalculateLetiAndLongDifferenceOfAtoB(Vector2 a, Vector2 b)
+    {
+        return new Vector2(Mathf.Sqrt((GetInstance.longitudeMetricsPerDegree * (a.x - b.x)) *
+                                      (GetInstance.longitudeMetricsPerDegree * (a.x - b.x))
+                                     ),
+                           Mathf.Sqrt((GetInstance.CalculateLatitudeMetricParDegree((a.y + b.y ) / 2) * (a.y - b.y)) *
+                                      (GetInstance.CalculateLatitudeMetricParDegree((a.y + b.y ) / 2) * (a.y - b.y))
+                                     )
+                );
+    }
 }
