@@ -15,11 +15,6 @@ public class SpotManager : MonoBehaviour {
     List<SpotClass> ref_SpotClasses;
     //SpotClass[] ref_SpotClasses;
 
-    [SerializeField]
-    UnityEngine.UI.Text LongDiff;
-    [SerializeField]
-    UnityEngine.UI.Text LetiDiff;
-
     private void Start()
     {
         ref_SpotClasses = new List<SpotClass>();
@@ -80,9 +75,6 @@ public class SpotManager : MonoBehaviour {
             Vector2 Diff = long_lati_calculator.GetInstance.CalculateLetiAndLongDifferenceOfAtoB(
                 spotClass.ThisSpotData.GetSpotCoordInVec2,
                 ref_Locator.locationCoordination.GetLocationCoordInVec2);
-            
-            LongDiff.text = Diff.x.ToString("f3");
-            LetiDiff.text = Diff.y.ToString("f3");
 
             Vector3 SpotPosition = new Vector3(Diff.x / LongDegPerWorldSpace, 1,Diff.y / LetiDegPerWorldSpace);
             spotClass.SetWorldPosition(SpotPosition);
