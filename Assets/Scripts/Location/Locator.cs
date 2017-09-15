@@ -6,23 +6,29 @@ public class Locator : MonoBehaviour
     LocationService locationService;
     [System.NonSerialized]
     public LocationCoordination locationCoordination;
-
+    //public MetricsCoordination metricsCoordination;
+    DistanceCalculator distanceCalculator;
     float locationAnalyzeCounter;
     [SerializeField]
     float locationAnalyzeTime;
     bool isMobilePlatform;
     bool isLocationUpdating;
     GoogleMapDrawer googleMapDrawer;
+    SpotManager spotManager;
     [SerializeField]
     float initlat = 35.513f;
     [SerializeField]
     float initlong = 139.619f;
+
+
     // Use this for initialization
     void Start()
     {
         locationService = Input.location;
         locationCoordination = ScriptableObject.CreateInstance<LocationCoordination>();
+        distanceCalculator = gameObject.GetComponent<DistanceCalculator>();
         googleMapDrawer = GameObject.FindGameObjectWithTag("MapDrawer").GetComponent<GoogleMapDrawer>();
+        spotManager = GameObject.FindGameObjectWithTag("SpotManager").GetComponent<SpotManager>();
         googleMapDrawer.Calculator = locationCoordination;
         //ロケーションサービスが無効、かつユーザーが許可しているなら
         //ロケーションサービスを有効化
@@ -54,13 +60,20 @@ public class Locator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isMobilePlatform)
+        if (/*isMobilePlatform*/true)
         {
             StartCoroutine("LocationUpdate");
             googleMapDrawer.BuildMap();
             locationAnalyzeCounter += Time.deltaTime;
             if (!(isLocationUpdating) && locationAnalyzeCounter >= locationAnalyzeTime)
             {
+<<<<<<< HEAD
+=======
+                StartCoroutine(LocationUpdate());
+                googleMapDrawer.BuildMap();
+                spotManager.StartSpotLocationUpdate();
+                
+>>>>>>> origin/master
                 locationAnalyzeCounter = 0.0f;
                 
                 
@@ -85,6 +98,8 @@ public class Locator : MonoBehaviour
             if (locationService.status == LocationServiceStatus.Running)
             {
                 locationCoordination.SetCoordination(locationService.lastData.longitude, locationService.lastData.latitude);
+                //metricsCoordination.ConvertLongAndLetiToMetrics();
+                distanceCalculator.DistanceCalculation();
             }
             else
             {
@@ -95,5 +110,12 @@ public class Locator : MonoBehaviour
         }
         
         yield return null;
+    }
+
+    float CalculateDistanceOfNowCoordinationToSpot(SpotData targetSpotData)
+    {
+        Vector2 a = new Vector2(locationCoordination.GetLongitude, locationCoordination.GetLatitude);
+        Vector2 b = new Vector2(targetSpotData.longitude, targetSpotData.letitude);
+        return long_lati_calculator.GetInstance.CalculateLetiAndLongDistanceOfAtoB(a, b);
     }
 }
