@@ -50,18 +50,20 @@ public class Locator : MonoBehaviour
         }
 
     }
-
+    
     // Update is called once per frame
     void Update()
     {
         if (isMobilePlatform)
         {
+            StartCoroutine("LocationUpdate");
+            googleMapDrawer.BuildMap();
             locationAnalyzeCounter += Time.deltaTime;
             if (!(isLocationUpdating) && locationAnalyzeCounter >= locationAnalyzeTime)
             {
-                StartCoroutine("LocationUpdate");
-                googleMapDrawer.BuildMap();
                 locationAnalyzeCounter = 0.0f;
+                
+                
             }
         }
     }
