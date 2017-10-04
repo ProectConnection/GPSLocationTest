@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CompassRotator : MonoBehaviour {
@@ -11,8 +10,7 @@ public class CompassRotator : MonoBehaviour {
     float rotationSplitDegrees;
 
     [SerializeField]
-    float rotationUpdateSecond = 1.0f;
-    bool conpassActive = true;
+    float rotationUpdateSecond = 0.2f;
 
     // Use this for initialization
     void Start () {
@@ -21,10 +19,6 @@ public class CompassRotator : MonoBehaviour {
         rotationSplitDegrees = (360f / rotationSplit_num);
 
         StartCoroutine(GetCompassTrueHeading());
-    }
-	// Update is called once per frame
-	void Update () {
-        
     }
 
    IEnumerator GetCompassTrueHeading()
@@ -39,7 +33,8 @@ public class CompassRotator : MonoBehaviour {
 
     void UpdateRotationYaw()
     {
-        rotation_Yaw = Input.compass.trueHeading;        
+        rotation_Yaw = Input.compass.trueHeading;
+        Debug.Log("rotation_Yaw = " + rotation_Yaw);
     }
 
     void UpdateRotationYawToRotationObject()

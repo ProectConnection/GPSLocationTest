@@ -11,6 +11,7 @@ using TouchScript.Utils.Debug;
 #endif
 using UnityEngine;
 
+
 namespace TouchScript.Gestures
 {
     /// <summary>
@@ -86,6 +87,7 @@ namespace TouchScript.Gestures
         /// <summary>
         /// Plane where transformation occured.
         /// </summary>
+        ///
         public Plane TransformPlane
         {
             get { return transformPlane; }
@@ -189,6 +191,7 @@ namespace TouchScript.Gestures
                             projectionParams.ProjectTo(newScreenPos1, TransformPlane);
             var oldVector = projectionParams.ProjectTo(oldScreenPos2, TransformPlane) -
                             projectionParams.ProjectTo(oldScreenPos1, TransformPlane);
+            ///Camera.main.transform
             var angle = Vector3.Angle(oldVector, newVector);
             if (Vector3.Dot(Vector3.Cross(oldVector, newVector), TransformPlane.normal) < 0)
                 angle = -angle;

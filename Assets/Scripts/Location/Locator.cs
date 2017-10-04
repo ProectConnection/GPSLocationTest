@@ -1,35 +1,33 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Locator : MonoBehaviour
 {
     LocationService locationService;
     [System.NonSerialized]
     public LocationCoordination locationCoordination;
-    //public MetricsCoordination metricsCoordination;
     DistanceCalculator distanceCalculator;
     float locationAnalyzeCounter;
     [SerializeField]
     float locationAnalyzeTime;
     bool isMobilePlatform;
     bool isLocationUpdating;
-    GoogleMapDrawer googleMapDrawer;
-    SpotManager spotManager;
     [SerializeField]
-    float initlat = 35.513f;
+    double initlat = 35.513f;
     [SerializeField]
-    float initlong = 139.619f;
-
+    double initlong = 139.619f;
+    public UnityEvent OnLocationUpdate;
 
     // Use this for initialization
     void Start()
     {
+        OnLocationUpdate = new UnityEvent();
         locationService = Input.location;
         locationCoordination = ScriptableObject.CreateInstance<LocationCoordination>();
         distanceCalculator = gameObject.GetComponent<DistanceCalculator>();
-        googleMapDrawer = GameObject.FindGameObjectWithTag("MapDrawer").GetComponent<GoogleMapDrawer>();
-        spotManager = GameObject.FindGameObjectWithTag("SpotManager").GetComponent<SpotManager>();
-        googleMapDrawer.Calculator = locationCoordination;
+        //googleMapDrawer = GameObject.FindGameObjectWithTag("MapDrawer").GetComponent<GoogleMapDrawer>();
+        //googleMapDrawer.Calculator = locationCoordination;
         //ロケーションサービスが無効、かつユーザーが許可しているなら
         //ロケーションサービスを有効化
         switch (Application.platform)
@@ -56,29 +54,18 @@ public class Locator : MonoBehaviour
         }
 
     }
-    
+
     // Update is called once per frame
     void Update()
     {
-        if (/*isMobilePlatform*/true)
-        {
-            StartCoroutine("LocationUpdate");
-            googleMapDrawer.BuildMap();
             locationAnalyzeCounter += Time.deltaTime;
             if (!(isLocationUpdating) && locationAnalyzeCounter >= locationAnalyzeTime)
             {
-<<<<<<< HEAD
-=======
                 StartCoroutine(LocationUpdate());
-                googleMapDrawer.BuildMap();
-                spotManager.StartSpotLocationUpdate();
+                OnLocationUpdate.Invoke();
                 
->>>>>>> origin/master
                 locationAnalyzeCounter = 0.0f;
-                
-                
             }
-        }
     }
 
     IEnumerator LocationUpdate()
@@ -112,10 +99,10 @@ public class Locator : MonoBehaviour
         yield return null;
     }
 
-    float CalculateDistanceOfNowCoordinationToSpot(SpotData targetSpotData)
+    double CalculateDistanceOfNowCoordinationToSpot(SpotData targetSpotData)
     {
-        Vector2 a = new Vector2(locationCoordination.GetLongitude, locationCoordination.GetLatitude);
-        Vector2 b = new Vector2(targetSpotData.longitude, targetSpotData.letitude);
+        DVector2 a = new DVector2(locationCoordination.GetLongitude, locationCoordination.GetLatitude);
+        DVector2 b = new DVector2(targetSpotData.longitude, targetSpotData.letitude);
         return long_lati_calculator.GetInstance.CalculateLetiAndLongDistanceOfAtoB(a, b);
     }
 }
