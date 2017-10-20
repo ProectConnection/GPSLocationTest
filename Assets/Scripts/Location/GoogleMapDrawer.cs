@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System;
 using UnityEngine;
+using TouchScript.Gestures.Base;
+using TouchScript.Layers;
+using TouchScript.Utils;
 
 [RequireComponent(typeof(Renderer))]
 public class GoogleMapDrawer : MonoBehaviour {
@@ -10,8 +13,28 @@ public class GoogleMapDrawer : MonoBehaviour {
     [SerializeField]
     string signeture = null;
     [SerializeField]
-    int MapSize = 17;
-    public int mapSize
+
+    /* public static UnityEngine.Vector2  oldScreenPos1;
+     public static UnityEngine.Vector2 oldScreenPos2;
+     public static UnityEngine.Vector2 newScreenPos1;
+     public static UnityEngine.Vector2 newScreenPos2;
+
+     //public static float projectionParams;
+     public static TouchScript.Layers.ProjectionParams projectionParams;*/
+    float MapSize=17; /*= TransformGestureBase.doScaling(oldScreenPos1, oldScreenPos2, newScreenPos1,
+                                            newScreenPos2,projectionParams);*/
+    public Plane TransformPlane;
+   /* protected override float doRotation(Vector2 oldScreenPos1, Vector2 oldScreenPos2, Vector2 newScreenPos1,
+                                            Vector2 newScreenPos2, ProjectionParams projectionParams)
+    {
+        var newVector = projectionParams.ProjectTo(newScreenPos2, TransformPlane) -
+                        projectionParams.ProjectTo(newScreenPos1, TransformPlane);
+        var oldVector = projectionParams.ProjectTo(oldScreenPos2, TransformPlane) -
+                        projectionParams.ProjectTo(oldScreenPos1, TransformPlane);
+        return newVector.magnitude / oldVector.magnitude;
+
+    }*/
+    public float mapSize
     {
         get
         {

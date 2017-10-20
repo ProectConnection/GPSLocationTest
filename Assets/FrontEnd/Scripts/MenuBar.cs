@@ -18,7 +18,7 @@ public class MenuBar : MonoBehaviour {
 	void Start () {
 
         //メニューバーの初期位置
-        transform.position = new Vector3(110.0f, 140.0f, 0.0f);
+        transform.position = new Vector3(110.0f, 0.0f, 0.0f);
 
         EventTrigger trigger = ClickMenuBar.GetComponent<EventTrigger>();
         EventTrigger.Entry entry = new EventTrigger.Entry();

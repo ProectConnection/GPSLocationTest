@@ -696,6 +696,8 @@ namespace TouchScript.Gestures.Base
             screenTransformPixelThresholdSquared = screenTransformPixelThreshold * screenTransformPixelThreshold;
         }
 
+
+
         #endregion
     }
 }

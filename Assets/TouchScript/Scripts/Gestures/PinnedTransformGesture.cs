@@ -303,7 +303,7 @@ namespace TouchScript.Gestures
             return angle;
         }
 
-        private float doScaling(Vector3 center, Vector2 oldScreenPos, Vector2 newScreenPos,
+        public float doScaling(Vector3 center, Vector2 oldScreenPos, Vector2 newScreenPos,
                                 ProjectionParams projectionParams)
         {
             var newVector = projectionParams.ProjectTo(newScreenPos, TransformPlane) - center;
